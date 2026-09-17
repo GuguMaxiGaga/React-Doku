@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@layer components {
+  .app-background {
+    @apply relative min-h-screen overflow-hidden bg-[#eef3f8] text-slate-700;
+    background-image: radial-gradient(circle at 12% 8%, rgba(99, 102, 241, .12), transparent 30rem), radial-gradient(circle at 88% 88%, rgba(14, 165, 233, .12), transparent 28rem);
+  }
+  .app-background::before { content: ""; @apply pointer-events-none absolute inset-0 opacity-35; background-image: linear-gradient(rgba(30,41,59,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,.035) 1px, transparent 1px); background-size: 46px 46px; }
+  .bg-glow-white { @apply pointer-events-none absolute -top-24 left-1/4 size-96 rounded-full bg-indigo-300/25 blur-3xl; }
+  .bg-glow-orange { @apply pointer-events-none absolute -bottom-24 right-1/4 size-[30rem] rounded-full bg-sky-300/20 blur-3xl; }
+  .app-navbar { @apply relative z-10 navbar w-full rounded-2xl border border-slate-200/80 bg-white/85 px-4 shadow-lg shadow-slate-300/30 backdrop-blur-xl; }
+  .app-navbar-btn { @apply btn btn-square btn-ghost border-0 text-slate-600 hover:bg-slate-100 hover:text-indigo-700; }
+  .app-drawer-sidebar { @apply flex min-h-full flex-col items-start border-r border-slate-200 bg-[#f8fafc]/95 text-slate-700 shadow-xl shadow-slate-300/30 backdrop-blur-2xl is-drawer-close:w-16 is-drawer-open:w-64 transition-all duration-300; }
+  .app-menu-item { @apply is-drawer-close:tooltip is-drawer-close:tooltip-right flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium transition-all; }
+  .app-menu-link-inactive { @apply text-slate-500 hover:bg-slate-100 hover:text-slate-900; }
+  .app-menu-link-active { @apply bg-indigo-50 text-indigo-800 ring-1 ring-inset ring-indigo-100; }
+  .glass-card { @apply rounded-3xl border border-slate-200/90 bg-white/80 text-slate-700 shadow-xl shadow-slate-300/25 backdrop-blur-xl; }
+  .app-input { @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 shadow-sm transition-all placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10; }
+  .app-input[type="date"] { color-scheme: light; }
+  .app-input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: .7; }
+  .app-select { @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 shadow-sm transition-all focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10; }
+  .app-label { @apply mb-1.5 block text-sm font-medium text-slate-600; }
+  .section-title-wrapper { @apply mb-4 border-l-2 border-indigo-500 pl-3; }
+  .section-title { @apply text-lg font-semibold text-slate-800; }
+  .app-form-card { @apply card rounded-3xl border border-slate-200/90 bg-white/85 p-6 text-slate-700 shadow-xl shadow-slate-300/25 backdrop-blur-xl md:p-8; }
+  .app-form-card .label { @apply text-sm font-medium text-slate-600; }
+  .app-form-card .input, .app-form-card .select { @apply rounded-xl border-slate-200 bg-white text-slate-800 placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10; }
+  .app-form-card h2, .app-form-card h3 { @apply text-slate-800; }
+  .app-form-card .border-l-4 { @apply border-indigo-500; }
+  .app-form-card .card-actions { @apply border-slate-200; }
+  .app-form-card button[type="submit"] { @apply rounded-xl bg-indigo-600 px-6 font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700; }
+}
