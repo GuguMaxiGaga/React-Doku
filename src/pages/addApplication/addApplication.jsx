@@ -1,14 +1,37 @@
 import useInputManager from "./inputManager";
 import { DbManager } from './dbManager';
+import { useState, useEffect } from "react";
 
 function AddApplication() {
   const {application, handleChange} = useInputManager();
-  
+  const [status, setStatus] = useState(null);
   async function handleSubmit(event) {
   event.preventDefault();
-  await DbManager(application);
-  console.log(application);
-}
+  try {
+        await DbManager(application);
+        setStatus('success');
+    } catch {
+        setStatus('error');
+        }  
+    }         
+
+const [visible, setVisible] = useState(false);
+
+useEffect(() => {
+    if (status === null) {
+        setVisible(false);
+        return;
+    }
+    const showTimer = setTimeout(() => setVisible(true), 10);
+    const hideTimer = setTimeout(() => setVisible(false), 4500);
+    const clearTimer = setTimeout(() => setStatus(null), 5000);
+
+    return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+        clearTimeout(clearTimer);
+    };
+}, [status]);
 
     return (
         <div className="app-form-card max-w-3xl mx-auto">
@@ -49,6 +72,9 @@ function AddApplication() {
                             <label className="label text-sm font-medium text-neutral-700">Telefon</label>
                             <input type="tel" 
                                 className="app-input" 
+                                inputMode="tel"
+                                placeholder="05321/12345"
+                                pattern="[0-9+\s\-\/\(\)]+"
                                 autoComplete="tel"
                                 name="telefon"
                                 value={application.telefon}
@@ -71,8 +97,8 @@ function AddApplication() {
                             <input type="text" 
                                 className="app-input" 
                                 placeholder="inn-tegrativ.de" 
-                                name="website"
-                                value={application.website}
+                                name="internet"
+                                value={application.internet}
                                 onChange={handleChange}/>
                         </div>
                         
@@ -105,8 +131,8 @@ function AddApplication() {
                                 pattern="[0-9]{5}" 
                                 maxLength={5} 
                                 placeholder="38640"
-                                name="postleitzahl"
-                                value={application.postleitzahl}
+                                name="plz"
+                                value={application.plz}
                                 onChange={handleChange} />
                             </div>
                             <div className="col-span-2">
@@ -115,7 +141,7 @@ function AddApplication() {
                                 className="app-input"
                                 name="ort"
                                 value={application.ort}
-                              onChange={handleChange}
+                                onChange={handleChange}
                                  />
                             </div>
                         </div>
@@ -124,8 +150,8 @@ function AddApplication() {
                             <label className="label text-sm font-medium text-neutral-700">Anwendungen / Tech-Stack</label>
                             <input type="text" 
                             className="app-input" 
-                            name="techStack"
-                            value={application.techStack}
+                            name="anwendungen"
+                            value={application.anwendungen}
                             onChange={handleChange}/>
                         </div>
                     </div>
@@ -224,11 +250,26 @@ function AddApplication() {
                     className="btn bg-indigo-600 hover:bg-indigo-700 text-white border-none w-full md:w-auto shadow-md" >
                         Bewerbung speichern
                     </button>
-                </div>
 
+                   {status === 'success' && (
+                        <div className={`alert border-l-4 border-green-500 bg-green-50 text-green-700 px-4 py-2 rounded text-sm w-full
+                                        transition-all duration-500
+                                         ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                                         ✓ Bewerbung erfolgreich gespeichert!
+                        </div>
+                                )}
+                    {status === 'error' && (
+                        <div className={`alert border-l-4 border-red-500 bg-red-50 text-red-700 px-4 py-2 rounded text-sm w-full
+                                        transition-all duration-500
+                                        ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                                        ✗ Speichern fehlgeschlagen. Bitte erneut versuchen.
+                        </div>
+                                )}
+                </div>
             </form>
         </div>
     );
 }
+
 
 export default AddApplication;

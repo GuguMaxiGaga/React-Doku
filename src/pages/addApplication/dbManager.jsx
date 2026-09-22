@@ -7,7 +7,14 @@ export async function DbManager (application) {
         body: JSON.stringify({
             betrieb: application.betrieb,
             ansprechpartner: application.ansprechpartner,
-            email: application.email
+            telefon: application.telefon,
+            email: application.email,
+            internet: application.internet,
+            strasse: application.strasse,
+            hausnummer: application.hausnummer,
+            plz: application.plz,
+            ort: application.ort,
+            anwendungen: application.anwendungen
         }),
     });
 

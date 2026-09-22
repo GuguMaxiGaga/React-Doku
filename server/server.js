@@ -35,13 +35,13 @@ app.get('/api/health', async (_request, response) => {
 
 const port = Number(process.env.PORT) || 3001;
 app.post('/api/applications', async (request, response) => {
-  const {betrieb, ansprechpartner, email} = request.body;
+  const {betrieb, ansprechpartner, telefon, email, internet, strasse, hausnummer, plz, ort, anwendungen} = request.body;
   
   try {
     await pool.query(
-      `INSERT INTO gruppe_shared.betrieb (name, ansprechpartner, telefon)
-      VALUES ($1,$2,$3)`,
-      [betrieb, ansprechpartner, email]
+      `INSERT INTO gruppe_shared.betrieb (betrieb, ansprechpartner, telefon, email, internet, strasse, hausnummer, plz, ort, anwendungen)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+      [betrieb, ansprechpartner, telefon, email, internet, strasse, hausnummer, plz, ort, anwendungen]
     );
 
     response.status(201).json({saved:true});
