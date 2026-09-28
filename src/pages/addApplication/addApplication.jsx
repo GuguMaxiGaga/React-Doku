@@ -2,13 +2,13 @@ import useInputManager from "./inputManager";
 import { DbManager } from './dbManager';
 import { useState, useEffect } from "react";
 
-function AddApplication() {
+function AddApplication({username}) {
   const {application, handleChange} = useInputManager();
   const [status, setStatus] = useState(null);
   async function handleSubmit(event) {
   event.preventDefault();
   try {
-        await DbManager(application);
+        await DbManager(application, username);
         setStatus('success');
     } catch {
         setStatus('error');
@@ -201,12 +201,12 @@ useEffect(() => {
                         <div>
                             <label className="label text-sm font-medium text-neutral-700">Praktikum möglich?</label>
                             <select className="app-select"
-                            name="praktikumMoeglich"
-                            value={application.praktikumMoeglich}
+                            name="moeglich"
+                            value={application.moeglich}
                             onChange={handleChange}>
                                 <option value="" disabled defaultValue>Bitte wählen...</option>
-                                <option value="true" className="bg-white text-neutral-900">Ja</option>
-                                <option value="false" className="bg-white text-neutral-900">Nein</option>
+                                <option value="Ja" className="bg-white text-neutral-900">Ja</option>
+                                <option value="Nein" className="bg-white text-neutral-900">Nein</option>
                             </select>
                         </div>
                          

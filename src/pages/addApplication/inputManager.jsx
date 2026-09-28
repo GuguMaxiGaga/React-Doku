@@ -16,7 +16,7 @@
     rueckmeldungAm: '',
     nachgefragtAm: '',
     telefoniertMit: '',
-    praktikumMoeglich: '',
+    moeglich: '',
     praktikumAb: '',
     entfernung: '',
     fahrtzeit: ''

@@ -1,56 +1,32 @@
 import express from 'express';
-import pg from 'pg';
 import dotenv from 'dotenv';
 dotenv.config({ path: './server/.env' });
+import { pool } from './pool.js';
+import { loginRoute } from './routes/login.js';
+import { addApplicationsRoute } from './routes/addApplications.js';
+import { getApplicationsRoute } from './routes/getApplications.js';
 
-const { Pool } = pg;
-const requiredVariables = ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'];
-const missingVariables = requiredVariables.filter((variable) => !process.env[variable]);
-
+const requiredVariables = ['DB_HOST', 'DB_PORT', 'DB_NAME'];
+const missingVariables = requiredVariables.filter((v) => !process.env[v]);
 if (missingVariables.length > 0) {
   throw new Error(`In deiner .env fehlen: ${missingVariables.join(', ')}`);
 }
 
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-});
-
 const app = express();
 app.use(express.json());
-
 
 app.get('/api/health', async (_request, response) => {
   try {
     const result = await pool.query('SELECT NOW() AS database_time');
     response.json({ connected: true, databaseTime: result.rows[0].database_time });
   } catch (error) {
-    console.error('PostgreSQL-Verbindung fehlgeschlagen:', error.message);
-    response.status(500).json({ connected: false, message: 'PostgreSQL-Verbindung fehlgeschlagen.' });
+    response.status(500).json({ connected: false, message: error.message });
   }
 });
+
+app.post('/api/login', loginRoute);
+app.post('/api/applications', addApplicationsRoute);
+app.get('/api/applications/:username', getApplicationsRoute);
 
 const port = Number(process.env.PORT) || 3001;
-app.post('/api/applications', async (request, response) => {
-  const {betrieb, ansprechpartner, telefon, email, internet, strasse, hausnummer, plz, ort, anwendungen} = request.body;
-  
-  try {
-    await pool.query(
-      `INSERT INTO gruppe_shared.betrieb (betrieb, ansprechpartner, telefon, email, internet, strasse, hausnummer, plz, ort, anwendungen)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
-      [betrieb, ansprechpartner, telefon, email, internet, strasse, hausnummer, plz, ort, anwendungen]
-    );
-
-    response.status(201).json({saved:true});
-  }
-  catch (error){
-    console.error(error.message);
-    response.status(500).json({saved: false});
-  }
-});
-app.listen(port, () => {
-  console.log(`API läuft auf http://localhost:${port}`);
-});
+app.listen(port, () => console.log(`API läuft auf http://localhost:${port}`));
